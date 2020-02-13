@@ -18,7 +18,13 @@ function setMovieData(movieIndex: string, moviePrice: string) {
 function updateSelectedCount() {
   const selectedSeats = document.querySelectorAll(".row .seat.selected");
 
-  const seatsIndex = [...selectedSeats].map(seat => [...seats].indexOf(seat));
+  // Converting the nodelists into arrays
+  let selectedSeatsArray = Array.prototype.slice.call(selectedSeats);
+  let seatsArray = Array.prototype.slice.call(seats);
+
+  const seatsIndex = [...selectedSeatsArray].map(seat =>
+    [...seatsArray].indexOf(seat)
+  );
 
   localStorage.setItem("selectedSeats", JSON.stringify(seatsIndex));
 

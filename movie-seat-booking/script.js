@@ -10,7 +10,8 @@ var seats = document.querySelectorAll(".row.seat:not(.occupied)");
 var count = document.getElementById("count");
 var total = document.getElementById("total");
 var movieSelect = document.getElementById("movie");
-var ticketPrice = +movieSelect.value;
+populateUI();
+var ticketPrice = +movieSelect.value; //+ will change it to number
 // Save selected movie index and price
 function setMovieData(movieIndex, moviePrice) {
     localStorage.setItem("selectedMovieIndex", movieIndex);
@@ -19,11 +20,30 @@ function setMovieData(movieIndex, moviePrice) {
 // Update total and count
 function updateSelectedCount() {
     var selectedSeats = document.querySelectorAll(".row .seat.selected");
-    var seatsIndex = __spreadArrays(selectedSeats).map(function (seat) { return __spreadArrays(seats).indexOf(seat); });
+    var selectedSeatsArray = Array.prototype.slice.call(selectedSeats);
+    var seatsArray = Array.prototype.slice.call(seats);
+    var seatsIndex = __spreadArrays(selectedSeatsArray).map(function (seat) {
+        return __spreadArrays(seatsArray).indexOf(seat);
+    });
     localStorage.setItem("selectedSeats", JSON.stringify(seatsIndex));
     var selectedSeatsCount = selectedSeats.length;
     count.innerText = selectedSeatsCount.toString();
     total.innerText = (selectedSeatsCount * ticketPrice).toString();
+}
+// Get data from localStorage and populate UI
+function populateUI() {
+    var selectedSeats = JSON.parse(localStorage.getItem("selectedSeats") || "{}");
+    if (selectedSeats !== null && selectedSeats.length > 0) {
+        seats.forEach(function (seat, index) {
+            if (selectedSeats.indexOf(index) > -1) {
+                seat.classList.add("selected");
+            }
+        });
+    }
+    var selectedMovieIndex = localStorage.getItem("selectedMovieIndex");
+    if (selectedMovieIndex !== null) {
+        movieSelect.selectedIndex = +selectedMovieIndex;
+    }
 }
 // Movie Select Event
 movieSelect.addEventListener("change", function (e) {
@@ -39,3 +59,5 @@ container.addEventListener("click", function (e) {
         updateSelectedCount();
     }
 });
+// Initial Count and total set
+updateSelectedCount();

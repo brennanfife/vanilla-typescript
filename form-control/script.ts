@@ -1,35 +1,30 @@
-// Here, we are using type assertion with HTMLFormElement & HTMLInputElement
-// This is telling the compiler, which is either deciding between one of the two above or null.
-// This says we know better what the actual type is.
-// instead of <HTMLFormElement>, we could also do 'as HTMLFormElement' at the end.
-const form = <HTMLFormElement>document.getElementById("form");
-const username = <HTMLInputElement>document.getElementById("username");
-const email = <HTMLInputElement>document.getElementById("email");
-const password = <HTMLInputElement>document.getElementById("password");
-const passwordConfirmation = <HTMLInputElement>(
-  document.getElementById("passwordConfirmation")
-);
-
-function showError(input: HTMLElement, message: string) {
-  const formControl = <HTMLElement>input.parentElement;
-  formControl.className = "form-control error";
-  const small = <HTMLElement>formControl.querySelector("small");
-  small.innerText = message;
-}
+const form = document.getElementById("form") as HTMLFormElement;
+const username = document.getElementById("username") as HTMLInputElement;
+const email = document.getElementById("email") as HTMLInputElement;
+const password = document.getElementById("password") as HTMLInputElement;
+const passwordConfirmation = document.getElementById(
+  "passwordConfirmation"
+) as HTMLInputElement;
 
 function showSuccess(input: HTMLElement) {
-  const formControl = <HTMLElement>input.parentElement;
+  const formControl = input.parentElement as HTMLElement;
   formControl.className = "form-control success";
 }
 
-function checkEmail(input: HTMLInputElement) {
-  const res = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  if (res.test(input.value.trim())) showSuccess(input);
-  else showError(input, "Email is not valid");
+function showError(input: HTMLElement, message: string) {
+  const formControl = input.parentElement as HTMLElement;
+  formControl.className = "form-control error";
+  const small = formControl.querySelector("small") as HTMLElement;
+  small.innerText = message;
 }
 
+function requiredField(input: HTMLInputElement) {
+  if (input.value.length < 1) showError(input, "field is required");
+}
+
+// Check that the required fields exist
 function checkRequired(inputArray: HTMLFormElement[] | HTMLInputElement[]) {
-  inputArray.forEach((input: any) => {
+  inputArray.forEach((input: HTMLFormElement | HTMLInputElement) => {
     if (input.value.trim() === "")
       showError(input, `${getFieldName(input)} is required`);
     else showSuccess(input);
@@ -56,6 +51,12 @@ function checkLength(
   }
 }
 
+function checkEmail(input: HTMLInputElement) {
+  const res = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  if (res.test(input.value.trim())) showSuccess(input);
+  else showError(input, "Email is not valid");
+}
+
 function checkPasswordsMatch(
   input1: HTMLInputElement,
   input2: HTMLInputElement
@@ -64,6 +65,7 @@ function checkPasswordsMatch(
     showError(input2, "passwords do not match");
 }
 
+// Get the field name
 function getFieldName(input: HTMLElement) {
   return input.id.charAt(0).toUpperCase() + input.id.slice(1);
 }
@@ -75,4 +77,6 @@ form.addEventListener("submit", function(e) {
   checkLength(password, 6, 25);
   checkEmail(email);
   checkPasswordsMatch(password, passwordConfirmation);
+
+  console.log(username.value + "\n", email.value + "\n", password.value);
 });

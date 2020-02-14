@@ -8,22 +8,40 @@
     <title>Form Validator</title>
   </head>
   <body>
-    <div class="container">
+    <div class="wrapper">
       <form id="form" class="form">
         <h2>Register</h2>
         <div class="form-control">
           <label for="username">Username</label>
-          <input type="text" id="username" placeholder="Enter username" />
+          <input
+            type="text"
+            id="username"
+            placeholder="Enter username"
+            onblur="{requiredField(this)}"
+            required
+          />
           <small>Error message</small>
         </div>
         <div class="form-control">
           <label for="email">Email</label>
-          <input type="text" id="email" placeholder="Enter email" />
+          <input
+            type="email"
+            id="email"
+            placeholder="Enter email"
+            onblur="{requiredField(this)}"
+            required
+          />
           <small>Error message</small>
         </div>
         <div class="form-control">
           <label for="password">Password</label>
-          <input type="password" id="password" placeholder="Enter password" />
+          <input
+            type="password"
+            id="password"
+            placeholder="Enter password"
+            onblur="{requiredField(this)}"
+            required
+          />
           <small>Error message</small>
         </div>
         <div class="form-control">
@@ -31,14 +49,15 @@
           <input
             type="password"
             id="passwordConfirmation"
-            placeholder="Confirm password"
+            placeholder="Enter password again"
+            onblur="{requiredField(this)}"
+            required
           />
           <small>Error message</small>
         </div>
         <button type="submit">Submit</button>
       </form>
     </div>
-
     <script src="script.js"></script>
   </body>
 </html>

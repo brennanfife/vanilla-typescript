@@ -6,12 +6,12 @@ const passwordConfirmation = document.getElementById(
   "passwordConfirmation"
 ) as HTMLInputElement;
 
-function showSuccess(input: HTMLElement) {
+function showSuccess(input: HTMLInputElement) {
   const formControl = input.parentElement as HTMLElement;
   formControl.className = "form-control success";
 }
 
-function showError(input: HTMLElement, message: string) {
+function showError(input: HTMLInputElement, message: string) {
   const formControl = input.parentElement as HTMLElement;
   formControl.className = "form-control error";
   const small = formControl.querySelector("small") as HTMLElement;
@@ -23,19 +23,15 @@ function requiredField(input: HTMLInputElement) {
 }
 
 // Check that the required fields exist
-function checkRequired(inputArray: HTMLFormElement[] | HTMLInputElement[]) {
-  inputArray.forEach((input: HTMLFormElement | HTMLInputElement) => {
+function checkRequired(inputArray: HTMLInputElement[]) {
+  inputArray.forEach((input: HTMLInputElement) => {
     if (input.value.trim() === "")
       showError(input, `${getFieldName(input)} is required`);
     else showSuccess(input);
   });
 }
 
-function checkLength(
-  input: HTMLFormElement | HTMLInputElement,
-  min: number,
-  max: number
-) {
+function checkLength(input: HTMLInputElement, min: number, max: number) {
   if (input.value.length < min) {
     showError(
       input,
@@ -66,7 +62,8 @@ function checkPasswordsMatch(
 }
 
 // Get the field name
-function getFieldName(input: HTMLElement) {
+function getFieldName(input: HTMLInputElement) {
+  if (input === passwordConfirmation) input.id = "password Confirmation"; // add a space
   return input.id.charAt(0).toUpperCase() + input.id.slice(1);
 }
 
@@ -78,5 +75,14 @@ form.addEventListener("submit", function(e) {
   checkEmail(email);
   checkPasswordsMatch(password, passwordConfirmation);
 
-  console.log(username.value + "\n", email.value + "\n", password.value);
+  console.log(
+    "username = " +
+      username.value +
+      "\n" +
+      "email = " +
+      email.value +
+      "\n" +
+      "password = " +
+      password.value
+  );
 });

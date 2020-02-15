@@ -1,5 +1,5 @@
 :root {
-  --primary-color: #5fbaa7;
+  --primary-color: red;
 }
 
 * {
@@ -20,14 +20,6 @@ body {
 
 h1 {
   color: var(--primary-color);
-}
-
-p {
-  text-align: center;
-}
-
-.money-img {
-  width: 9rem;
 }
 
 .btn {
@@ -67,7 +59,7 @@ p {
   text-align: right;
 }
 
-.swap-container {
+.swap-rate-container {
   display: flex;
   align-items: center;
   justify-content: space-between;
